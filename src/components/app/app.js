@@ -1,50 +1,61 @@
-import React from 'react';
-import {Col, Row, Container} from 'reactstrap';
+import React, {Component} from 'react';
+import { Col, Row, Container } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
-import GotService from '../../gotService'
+import styled from 'styled-components'
 
-const App = () => {
+const Button = styled.button`
+    padding: 1rem 3rem;
+    color: #000;
+    margin-bottom: 5rem;
+`
 
-    return (
-        <> 
-            <Container>
-                <Header />
-            </Container>
-            <Container>
-                <Row>
-                    <Col lg={{size: 5, offset: 0}}>
-                        <RandomChar/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md='6'>
-                        <ItemList />
-                    </Col>
-                    <Col md='6'>
-                        <CharDetails />
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+export default class App extends Component {
+
+    state = {
+        display: true
+    }
+
+    hideChar = () => {
+        this.setState({
+            display: !this.state.display
+        })
+    }
+
+    render() {
+
+        const {display} = this.state
+
+        const hideChar = display ? <RandomChar /> : null
+
+        return (
+            <>
+                <Container>
+                    <Header />
+                </Container>
+                <Container>
+                    <Row>
+                        <Col lg={{ size: 5, offset: 0 }}>
+                            {hideChar}
+                        </Col>
+                        <Col>
+                            <Button onClick={this.hideChar}>
+                                Click me
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md='6'>
+                            <ItemList />
+                        </Col>
+                        <Col md='6'>
+                            <CharDetails />
+                        </Col>
+                    </Row>
+                </Container>
+            </>
+        );
+    }
 };
-
-//TEST
-const got = new GotService()
-
-got.getAllHouses()
-    .then(res => console.log(res))
-
-got.getAllCharacters()
-    .then(res => console.log(res))
-
-got.getAllBooks()
-    .then(res => console.log(res))
-
-got.getCharacter(400)
-    .then(res => console.log(res))
-
-export default App;
