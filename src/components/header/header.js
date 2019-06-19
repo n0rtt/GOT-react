@@ -27,6 +27,7 @@ const HeaderLinks = styled.ul`
 `;
 
 const Header = () => {
+
     return (
         <HeaderBlock>
             <HeaderTitle>
@@ -36,13 +37,13 @@ const Header = () => {
             </HeaderTitle>
             <HeaderLinks>
                 <li>
-                    <a href="#">Characters</a>
+                    <a href='#'>Characters</a>
                 </li>
                 <li>
-                    <a href="#">Houses</a>
+                    <a href='#'>Houses</a>
                 </li>
                 <li>
-                    <a href="#">Books</a>   
+                    <a href='#'>Books</a>   
                 </li>
             </HeaderLinks>
         </HeaderBlock>

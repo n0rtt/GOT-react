@@ -4,9 +4,10 @@ import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
-
+import GotService from '../../gotService'
 
 const App = () => {
+
     return (
         <> 
             <Container>
@@ -30,5 +31,20 @@ const App = () => {
         </>
     );
 };
+
+//TEST
+const got = new GotService()
+
+got.getAllHouses()
+    .then(res => console.log(res))
+
+got.getAllCharacters()
+    .then(res => console.log(res))
+
+got.getAllBooks()
+    .then(res => console.log(res))
+
+got.getCharacter(400)
+    .then(res => console.log(res))
 
 export default App;
