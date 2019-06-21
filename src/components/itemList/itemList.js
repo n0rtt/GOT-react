@@ -1,25 +1,58 @@
-import React from 'react';
+import React, {Component} from 'react';
 import styled from 'styled-components'
+import gotService from '../services/gotService'
+import Spinner from '../spinner';
 
-const ItemList = () => {
-
-    const List = styled.ul`
+const List = styled.ul`
         cursor: pointer;
     `
+export default class ItemList extends Component {
 
-    return (
-        <List>
-            <li className="list-group-item">
-                John Snow
-            </li>
-            <li className="list-group-item">
-                Brandon Stark
-            </li>
-            <li className="list-group-item">
-                Geremy
-            </li>
-        </List>
-    );
+    gotService = new gotService()
+
+    state = {
+        charList: null
+    }
+
+    componentDidMount() {
+        this.gotService.getAllCharacters()
+            .then((charList) => {
+                this.setState({
+                    charList
+                })
+            })
+    }
+
+    renderItems(arr) {
+        return arr.map((item) => {
+
+            const id = item.url.split('/').pop()
+        
+            return (
+                <li 
+                key={id}
+                className="list-group-item"
+                onClick={() => this.props.onCharSelected(id)}>
+                    {item.name}
+                </li>
+            )
+        })
+    }
+
+    render() {
+
+        const {charList} = this.state
+
+        if (!charList) {
+            return <Spinner />
+        }
+
+        const items = this.renderItems(charList)
+
+        return (
+            <List>
+               {items}
+            </List>
+        )
+    }
 }
-
-export default ItemList

@@ -20,17 +20,21 @@ const Term = styled.span`
 `
 export default class RandomChar extends Component {
 
-    constructor() {
-        super()
-        this.updateChar()
-    }
-
     gotService = new gotService()
 
     state = {
         char: {},
         loading: true,
         error: false
+    }
+
+    componentWillMount() {
+        this.updateChar()
+        this.timerId = setInterval(this.updateChar, 4000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId)
     }
 
     onCharLoaded = (char) => {
@@ -47,7 +51,7 @@ export default class RandomChar extends Component {
         })
     }
 
-    updateChar() {
+    updateChar = () => {
         const id = Math.floor(Math.random() * 140 + 25)
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
@@ -73,6 +77,12 @@ export default class RandomChar extends Component {
 }
 
 const View = ({ char }) => {
+
+    Object.keys(char).forEach((state) => {
+        if (char[state] === '') {
+            char[state] = 'no data ;(';
+        }
+      });
 
     const { name, gender, born, died, culture } = char
 

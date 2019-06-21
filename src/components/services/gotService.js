@@ -2,8 +2,8 @@ export default class GotService {
     constructor() {
         this._apiBase = 'https://www.anapioficeandfire.com/api'
     }
-   
-    async getResourse (url) {
+
+    async getResourse(url) {
         const res = await fetch(`${this._apiBase}${url}`)
 
         if (!res.ok) {
@@ -14,7 +14,7 @@ export default class GotService {
     }
 
     async getAllCharacters() {
-        const allChars = await this.getResourse('/characters?page5&pageSize=10')
+        const allChars = await this.getResourse('/characters?page=6&pageSize=10')
         return allChars.map(this._transformCharacter)
     }
 
@@ -37,19 +37,21 @@ export default class GotService {
         const allBooks = await this.getResourse('/books')
         return allBooks.map(this._transformBook)
     }
-    
+
     async getBook(id) {
         const book = await this.getResourse(`/books/${id}`)
         return this._transformBook(book)
     }
 
     _transformCharacter(char) {
+
         return {
             name: char.name,
             gender: char.gender,
             born: char.born,
             died: char.died,
-            culture: char.culture
+            culture: char.culture,
+            url: char.url
         }
     }
 
