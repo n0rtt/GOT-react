@@ -3,7 +3,7 @@ export default class GotService {
         this._apiBase = 'https://www.anapioficeandfire.com/api'
     }
 
-    async getResourse(url) {
+    getResourse = async (url) => {
         const res = await fetch(`${this._apiBase}${url}`)
 
         if (!res.ok) {
@@ -13,44 +13,51 @@ export default class GotService {
         return await res.json()
     }
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const allChars = await this.getResourse('/characters?page=6&pageSize=10')
         return allChars.map(this._transformCharacter)
     }
 
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const char = await this.getResourse(`/characters/${id}`)
         return this._transformCharacter(char)
     }
 
-    async getAllHouses() {
+    getAllHouses = async () => {
         const allHouses = await this.getResourse('/houses')
         return allHouses.map(this._transformHouse)
     }
 
-    async getHouse(id) {
+    getHouse = async (id) => {
         const house = await this.getResourse(`/houses/${id}`)
         return this._transformHouse(house)
     }
 
-    async getAllBooks() {
+    getAllBooks = async () => {
         const allBooks = await this.getResourse('/books')
         return allBooks.map(this._transformBook)
     }
 
-    async getBook(id) {
+    getBook = async (id) => {
         const book = await this.getResourse(`/books/${id}`)
         return this._transformBook(book)
     }
 
-    _transformCharacter(char) {
+    isSet(data) {
+        if (data) {
+            return data
+        } else {
+            return 'no data ;('
+        }
+    }
 
+    _transformCharacter = (char) => {
         return {
-            name: char.name,
-            gender: char.gender,
-            born: char.born,
-            died: char.died,
-            culture: char.culture,
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died),
+            culture: this.isSet(char.culture),
             url: char.url
         }
     }

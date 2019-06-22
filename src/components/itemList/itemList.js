@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components'
 import gotService from '../services/gotService'
 import Spinner from '../spinner';
+import ErrorMessage from '../errorMessage';
 
 const List = styled.ul`
         cursor: pointer;
@@ -11,16 +12,26 @@ export default class ItemList extends Component {
     gotService = new gotService()
 
     state = {
-        charList: null
+        charList: null,
+        loading: true,
+        error: false
     }
 
     componentDidMount() {
         this.gotService.getAllCharacters()
             .then((charList) => {
                 this.setState({
-                    charList
+                    charList,
+                    loading: false
                 })
             })
+    }
+
+    componentDidCatch() {
+        this.setState({
+            error: true,
+            loading: false
+        })
     }
 
     renderItems(arr) {
@@ -41,9 +52,13 @@ export default class ItemList extends Component {
 
     render() {
 
-        const {charList} = this.state
+        const {charList, error, loading} = this.state
 
-        if (!charList) {
+        if (error) {
+            return <ErrorMessage/>
+        }
+
+        if (loading) {
             return <Spinner />
         }
 

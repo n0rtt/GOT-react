@@ -28,7 +28,7 @@ export default class RandomChar extends Component {
         error: false
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.updateChar()
         this.timerId = setInterval(this.updateChar, 4000)
     }
@@ -44,10 +44,9 @@ export default class RandomChar extends Component {
         })
     }
 
-    onError = (error) => {
+    componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
@@ -77,12 +76,6 @@ export default class RandomChar extends Component {
 }
 
 const View = ({ char }) => {
-
-    Object.keys(char).forEach((state) => {
-        if (char[state] === '') {
-            char[state] = 'no data ;(';
-        }
-      });
 
     const { name, gender, born, died, culture } = char
 
