@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
-import gotService from '../services/gotService'
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
@@ -9,19 +8,20 @@ const List = styled.ul`
     `
 export default class ItemList extends Component {
 
-    gotService = new gotService()
-
     state = {
-        charList: null,
+        itemList: null,
         loading: true,
         error: false
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
-            .then((charList) => {
+
+        const { getData } = this.props
+
+        getData()
+            .then((itemList) => {
                 this.setState({
-                    charList,
+                    itemList,
                     loading: false
                 })
             })
@@ -44,14 +44,16 @@ export default class ItemList extends Component {
     renderItems(arr) {
         return arr.map((item) => {
 
-            const id = item.url.split('/').pop()
+            const { id } = item
             
+            const label = this.props.renderItem(item)
+
             return (
                 <li
                     key={id}
                     className="list-group-item"
-                    onClick={() => this.props.onCharSelected(id)}>
-                    {item.name}
+                    onClick={() => this.props.onItemSelected(id)}>
+                    {label}
                 </li>
             )
         })
@@ -59,7 +61,7 @@ export default class ItemList extends Component {
 
     render() {
 
-        const { charList, error, loading } = this.state
+        const { itemList, error, loading } = this.state
 
         if (loading) {
             return <Spinner />
@@ -69,7 +71,7 @@ export default class ItemList extends Component {
             return <ErrorMessage />
         }
 
-        const items = this.renderItems(charList)
+        const items = this.renderItems(itemList)
 
         return (
             <List>
