@@ -16,18 +16,18 @@ const Heading = styled.h4`
     text-align: center; 
 `
 
-// const Error = styled.span`
-//     color: #fff;
-//     text-align: center;
-//     font-size: 26px;
-// `
+const Error = styled.span`
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
+`
 export default class CharDetails extends Component {
 
     gotService = new gotService()
 
     state = {
         char: null,
-        loading: true,
+        loading: false,
         error: false
     }
 
@@ -43,12 +43,20 @@ export default class CharDetails extends Component {
 
     componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
+    onError = () => {
+        this.setState({
+            error: true,
+            loading: false
+        })
+        console.log('error')
+    }
+
     updateChar = () => {
+        
         const { charId } = this.props
 
         if (!charId) {
@@ -66,24 +74,26 @@ export default class CharDetails extends Component {
                     loading: false
                 })
             })
+            .catch(this.onError)
 
         // this.foo.bar = 0;
     }
 
     render() {
         const { char, loading, error } = this.state
-
+        
         const errorMessage = error ? <ErrorMessage /> : null
-        const spinner = loading ? <Spinner/> : <span>Please, select character</span>
-        const selectChar = !char ? <span>Please, select character</span> : null
-            
+        const spinner = loading ? <Spinner /> : null
         const content = !(loading || error) ? <View char={char} /> : null
+        
+        if (!char && !error) {
+            return <Error>Please, select character</Error>
+        }
 
         return (
             <CharDetailsStyle rounded>
                 {errorMessage}
                 {spinner}
-                {selectChar}
                 {content}
             </CharDetailsStyle>
         );

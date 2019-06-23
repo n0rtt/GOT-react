@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components'
 import gotService from '../services/gotService'
 import Spinner from '../spinner';
@@ -25,12 +25,19 @@ export default class ItemList extends Component {
                     loading: false
                 })
             })
+            .catch(this.onError)
+    }
+
+    onError = () => {
+        this.setState({
+            error: true,
+            loading: false
+        })
     }
 
     componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
@@ -38,12 +45,12 @@ export default class ItemList extends Component {
         return arr.map((item) => {
 
             const id = item.url.split('/').pop()
-        
+            
             return (
-                <li 
-                key={id}
-                className="list-group-item"
-                onClick={() => this.props.onCharSelected(id)}>
+                <li
+                    key={id}
+                    className="list-group-item"
+                    onClick={() => this.props.onCharSelected(id)}>
                     {item.name}
                 </li>
             )
@@ -52,21 +59,21 @@ export default class ItemList extends Component {
 
     render() {
 
-        const {charList, error, loading} = this.state
-
-        if (error) {
-            return <ErrorMessage/>
-        }
+        const { charList, error, loading } = this.state
 
         if (loading) {
             return <Spinner />
+        }
+
+        if (error) {
+            return <ErrorMessage />
         }
 
         const items = this.renderItems(charList)
 
         return (
             <List>
-               {items}
+                {items}
             </List>
         )
     }

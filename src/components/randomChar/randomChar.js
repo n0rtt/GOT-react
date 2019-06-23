@@ -44,9 +44,18 @@ export default class RandomChar extends Component {
         })
     }
 
-    componentDidCatch() {
+    onError = (error) => {
         this.setState({
-            error: true
+            error: true,
+            loading: false
+        })
+    }
+
+    componentDidCatch() {
+        console.log('error')
+        this.setState({
+            error: true,
+            loading: false
         })
     }
 
