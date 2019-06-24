@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import ItemList from '../../itemList';
-import CharDetails, {Field} from '../../itemDetails';
-import ErrorMessage from '../../errorMessage'
-import gotService from '../../services/gotService'
-import RowBlock from '../../rowBlock'
-
+import ItemList from '../itemList';
+import CharDetails, {Field} from '../itemDetails';
+import ErrorMessage from '../errorMessage'
+import gotService from '../services/gotService'
+import RowBlock from '../rowBlock'
+import RandomCharPage from './randomCharPage'
 
 export default class CharacterPage extends Component {
 
@@ -54,7 +54,10 @@ export default class CharacterPage extends Component {
         )
 
         return (
-            <RowBlock left={itemList} right={charDetails} />
+            <>
+                <RandomCharPage/>
+                <RowBlock left={itemList} right={charDetails} />
+            </>
         )
     }
 }

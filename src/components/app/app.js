@@ -1,76 +1,74 @@
-import React, { Component } from 'react';
-import { Col, Row, Container } from 'reactstrap';
-import Header from '../header';
-import RandomChar from '../randomChar';
+import React from 'react'
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import { Container } from 'reactstrap'
+import Header from '../header'
 import styled from 'styled-components'
-import ErrorMessage from '../errorMessage'
+import JonSnow from './snow.gif'
+import './app.css'
 
-import CharacterPage from '../pages/characterPage'
-import HousesPage from '../pages/housesPage/'
-import BooksPage from '../pages/booksPage';
+import { CharacterPage, HousesPage, BooksPage, BooksItem, HomePage } from '../pages'
 
-import gotService from '../services/gotService'
+const AppWrapper = styled.div`
+    
+}
 
-
-const Button = styled.button`
-    padding: 1rem 3rem;
-    color: #000;
-    margin-bottom: 5rem;
 `
 
-export default class App extends Component {
+const NoMatchImg = styled.img`
+    width: 60%;
+    display: block;
+    margin: 0 auto;
+`
 
-    gotService = new gotService()
+const NoMatchMsg = styled.h2`
+    color: #fff;
+    text-align: center;
+    margin-bottom: 3rem;
+`
 
+const ReturnButton = styled.button`
+    padding: 1rem 3rem;
+    background: grey;
+    border: 1px solid white;
+    border-radius: 10rem;
+    display: block;
+    margin: 2rem auto;
+`
 
-    state = {
-        display: true,
-        error: false
-    }
+const App = () => {
 
-    componentDidCatch() {
-        this.setState({
-            error: true
-        })
-    }
+    const NoMatch = ({ location }) => (
+        <div>
+            <NoMatchMsg>Nothing found. ;(</NoMatchMsg>
+            <NoMatchImg src={JonSnow}></NoMatchImg>
+            <ReturnButton><Link to='/'>Return</Link></ReturnButton>
+        </div>
+    )
 
-    hideChar = () => {
-        this.setState({
-            display: !this.state.display
-        })
-    }
-
-    render() {
-
-        if (this.state.error) {
-            return <ErrorMessage />
-        }
-
-        const { display } = this.state
-
-        const hideChar = display ? <RandomChar /> : null
-
-        return (
-            <>
+    return (
+        <Router>
+            <AppWrapper>
                 <Container>
                     <Header />
                 </Container>
                 <Container>
-                    <Row>
-                        <Col lg={{ size: 5, offset: 0 }}>
-                            {hideChar}
-                        </Col>
-                        <Col>
-                            <Button onClick={this.hideChar}>
-                                Click me
-                            </Button>
-                        </Col>
-                    </Row>
-                    <CharacterPage />
-                    <BooksPage />
-                    <HousesPage />
+                    <Switch>
+                        <Route path='/' exact component={HomePage} />
+                        <Route path='/characters' exact component={CharacterPage} />
+                        <Route path='/houses' exact component={HousesPage} />
+                        <Route path='/books' exact component={BooksPage} />
+                        <Route path='/books/:id' exact render={
+                            ({ match }) => {
+                                const { id } = match.params
+                                return <BooksItem bookId={id} />
+                            }
+                        } />
+                        <Route component={NoMatch} />
+                    </Switch>
                 </Container>
-            </>
-        );
-    }
-};
+            </AppWrapper>
+        </Router>
+    )
+}
+
+export default App
